@@ -20,13 +20,6 @@ const cardData = [
 ];
 
 const Homepage = () => {
-  const [selectedTab, setSelectedTab] = useState(0);
-  const [cardAnim, setCardAnim] = useState('drop-fade-in');
-  const [displayedTab, setDisplayedTab] = useState(0);
-  const cardRef = useRef(null);
-  const tabCount = 3;
-  const tabHeight = 60; // px, should match the button's height+padding
-
   // Carousel state
   const [carouselIdx, setCarouselIdx] = useState(0);
   const [animClass, setAnimClass] = useState('carousel-drop-in');
@@ -43,15 +36,6 @@ const Homepage = () => {
     }, 8000);
     return () => clearInterval(interval);
   }, []);
-
-  const handleTabClick = (idx) => {
-    if (idx === displayedTab) return;
-    setCardAnim('drop-fade-out');
-    setTimeout(() => {
-      setDisplayedTab(idx);
-      setCardAnim('drop-fade-in');
-    }, 400);
-  };
 
   return (
     <div className="homepage">
@@ -119,37 +103,14 @@ const Homepage = () => {
           <div className="section2-title">The Bogle Benefit</div>
           <div className="section2-subtitle">Learn how integrating ACH into your payment process can benefit your business </div>
         </div>
-        <div className="section2-tabs" style={{position:'absolute', height: tabCount * tabHeight}}>
-          <div
-            className="section2-tab-sliver"
-            style={{
-              transform: `translateY(${selectedTab * tabHeight}px)`,
-              transition: 'transform 0.4s cubic-bezier(0.4,0,0.2,1)',
-              height: tabHeight - 8,
-            }}
-          />
-          {[0, 1, 2].map((idx) => (
-            <button
-              key={idx}
-              className={`section2-tab${selectedTab === idx ? " active" : ""}`}
-              onClick={() => { setSelectedTab(idx); handleTabClick(idx); }}
-              style={{height: tabHeight - 8, marginBottom: 8, position: 'relative', zIndex: 1}}
-            >
-              {cardData[idx].tab}
-            </button>
-          ))}
-        </div>
-        <div className="section2-content">
-          <div className="section2-left">
-            <div className="section2-card-display">
-              <div ref={cardRef} className={`section2-card ${cardAnim}`}>
-                <div className="section2-card-title">{cardData[displayedTab].title}</div>
-                {cardData[displayedTab].subtitle}
+        <div className="section2-cards-container">
+          <div className="section2-cards-scroll">
+            {cardData.map((card, index) => (
+              <div key={index} className="section2-square-card">
+                <div className="section2-card-title">{card.title}</div>
+                <div className="section2-card-subtitle">{card.subtitle}</div>
               </div>
-            </div>
-          </div>
-          <div className="section2-right">
-            {/* Empty for now */}
+            ))}
           </div>
         </div>
       </section>
